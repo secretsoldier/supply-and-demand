@@ -91,14 +91,14 @@ local function AddMember(leader,member)
 	table.Add(gang.members,{member})
 end
 
-local L_table = -- Making certain functions global
+local L_table = -- Global Functions:
 {
-	["CreateGang"] = CreateGang,
-	["RegisterMember"] = RegisterMember,
-	["RemoveGang"] = RemoveGang,
-	["AddMember"] = AddMember,
-	["RemoveMember"] = RemoveMember,
-	["Print"] = print
+	["CreateGang"] = CreateGang, -- S_D.Gang.CreateGang(ply,name)
+	["RegisterMember"] = RegisterMember, -- S_D.Gang.RegisterMember(ply,leader)
+	["RemoveGang"] = RemoveGang, -- S_D.Gang.RemoveGang(leader)
+	["AddMember"] = AddMember, -- S_D.Gang.AddMember(leader,member)
+	["RemoveMember"] = RemoveMember, -- S_D.Gang.RemoveMember(leader,member)
+	["Print"] = print -- S_D.Gang.Print(text)
 }
 S_D.Gang = {}
 for name,func in pairs(L_table) do
