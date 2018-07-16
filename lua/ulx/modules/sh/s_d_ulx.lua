@@ -6,3 +6,11 @@ local function ulxParam(enum,hint,optional,restrict,round,restofline) optional =
 	if !t[enum] then return end if optional then table.Add(t[enum],{ULib.cmds.optional}) end if restrict then table.Add(t[enum],{ULib.cmds.restrictToCompletes}) end
 	if restofline then table.Add(t[enum],{ULib.cmds.takeRestOfLine}) end if round then table.Add(t[enum],{ULib.cmds.round}) end return t[enum] end
 local NUM,BOOL,PLAYER,PLAYERS,STRING,ALL,OPERATOR,ADMIN,SUPERADMIN = 1,2,3,4,5,"user","operator","admin","superadmin"
+
+local AddPremium = ulxCommand("AddPremium",function(ply,days)S_D.Premium.AddPremium(ply,days)end)
+AddPremium:help"Gives a player Premium for a certain amount of time."
+AddPremium:defaultAccess(SUPERADMIN)
+local player,num = ulxParam(PLAYER,"target"),ulxParam(NUM,"days")
+player.target = "!%superadmin"
+num.min = 1
+num.max = 30
