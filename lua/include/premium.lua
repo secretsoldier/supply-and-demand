@@ -69,8 +69,8 @@ local function ValidStrDate(str)
 end
 
 local L_table = {
---	["Enum"] = {["Month"] = MONTH,["Month_3"] = MONTH_3,["Month_6"] = MONTH_6,["Month_9"] = MONTH_9,["Year"] = MONTH_12,["Perm"] = PERM}, -- S_D.Premium.Enum.Month
-	["AddPremium"] = AddPremiumDay, -- S_D.Premium.AddPremium(ply,days)
+	["Enum"] = {["Month"] = MONTH,["Month_3"] = MONTH_3,["Month_6"] = MONTH_6,["Month_9"] = MONTH_9,["Year"] = MONTH_12,["Perm"] = PERM}, -- S_D.Premium.Enum.Month
+	["AddPremium"] = AddPremium, -- S_D.Premium.AddPremium(ply,days)
 	["GetPremiumExpireDate"] = GetPremiumExpireDate, -- S_D.Premium.GetPremiumExpireDate(ply)
 	["GetAllPremium"] = GetAllPremium, -- S_D.Premium.GetAllPremium()
 	["StringToTable"] = StringToTable, -- S_D.Premium.StringToTable(str)

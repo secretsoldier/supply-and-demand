@@ -8,18 +8,9 @@ local function ulxParam(enum,hint,optional,restrict,round,restofline) optional =
 	if restofline then table.Add(t[enum],{ULib.cmds.takeRestOfLine}) end if round then table.Add(t[enum],{ULib.cmds.round}) end return t[enum] end
 local NUM,BOOL,PLAYER,PLAYERS,STRING,ALL,OPERATOR,ADMIN,SUPERADMIN = 1,2,3,4,5,"user","operator","admin","superadmin"
 
-local AddPremium = ulxCommand("AddPremium",function(ply,target,days) 
-	S_D.Premium.AddPremium(target,days) 
-	local x = s 
-	if days == 1 then 
-		x = nil 
-	end 
-	ulxLog("Gave %s Premium for %s day%s.",ply,target:Nick(),days,x) end,
+local AddPremium = ulxCommand("AddPremium",function(ply,target) S_D.Premium.AddPremium(target,S_D.Premium.Enum.Month) ulxLog("Gave %s Premium.",ply,target:Nick()) end,
 	"Gives a player Premium for a certain amount of time.",SUPERADMIN)
-local player,num = ulxParam(PLAYER,"target"),ulxParam(NUM,"days")
+local player = ulxParam(PLAYER,"target")
 player.target = "!%superadmin"
-num.min = 1
-num.max = 30
 AddPremium:addParam(player)
-AddPremium:addParam(num)
 
