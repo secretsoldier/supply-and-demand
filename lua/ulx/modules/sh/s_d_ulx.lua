@@ -7,10 +7,25 @@ local function ulxParam(enum,hint,optional,restrict,round,restofline) optional =
 	if !t[enum] then return end if optional then table.Add(t[enum],{ULib.cmds.optional}) end if restrict then table.Add(t[enum],{ULib.cmds.restrictToCompletes}) end
 	if restofline then table.Add(t[enum],{ULib.cmds.takeRestOfLine}) end if round then table.Add(t[enum],{ULib.cmds.round}) end return t[enum] end
 local NUM,BOOL,PLAYER,PLAYERS,STRING,ALL,OPERATOR,ADMIN,SUPERADMIN = 1,2,3,4,5,"user","operator","admin","superadmin"
-
-local AddPremium = ulxCommand("AddPremium",function(ply,target) S_D.Premium.AddPremium(target,S_D.Premium.Enum.Month) ulxLog("Gave %s Premium.",ply,target:Nick()) end,
-	"Gives a player Premium for a certain amount of time.",SUPERADMIN)
+-----
+local AddPremium = ulxCommand("AddPremium",
+	function(ply,target) S_D.Premium.AddPremium(target,S_D.Premium.Enum.Month) ulxLog("Gave %s Premium.",ply,target:Nick()) end,
+	"Gives a player Premium for a Month.",SUPERADMIN)
 local player = ulxParam(PLAYER,"target")
-player.target = "!%superadmin"
+--player.target = "!%superadmin"
 AddPremium:addParam(player)
-
+-----
+local RemovePremium = ulxCommand("RemovePremium",
+	function(ply,target) if S_D.Premium.RemovePremium(target) then ulxLog("Removed Premium from %s",ply,target:Nick()) else ulxError("This player does not have Premium to remove.",ply) end end,
+	"Removed Premium from a player.",SUPERADMIN)
+local player = ulxParam(PLAYER,"target")
+--player.target = "!%superadmin"
+RemovePremium:addParam(player)
+----
+local PrintPremiumPlayers_func = function(ply)
+	if SERVER then
+		ply:PrintMessage(HUD_PRINTTALK,table.ToString(S_D.Premium.GetAllPremium(),"Premium Players",true))
+	end
+end
+local PrintPremiumPlayers = ulxCommand("PrintPremiumPlayers",PrintPremiumPlayers_func,
+	"Prints a list of all the players with Premium in console.",SUPERADMIN)

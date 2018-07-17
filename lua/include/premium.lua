@@ -1,5 +1,13 @@
 local table_name,f,s = "S_D_Premium",string.format,sql.Query
-function sqlQuery(str) local x = s(str) if x == false then error(str) else return x end end local sql.Query = sqlQuery
+function sqlQuery(str) 
+	local x = s(str) 
+	if x == false then 
+		error(str) 
+	else 
+		return x 
+	end 
+end 
+sql.Query = sqlQuery
 if !sql.TableExists(table_name) then
 	sql.Query(f("CREATE TABLE %s( SteamID TEXT, Date TEXT )",table_name))
 end
@@ -53,6 +61,11 @@ local function AddPremiumDay(ply,days)
 	local str = f("INSERT INTO %s ( SteamID, Date ) %s",table_name,"VALUES ( %s, %s )")
 	sql.Query(f(str,ply:SteamID(),TableToString(AddToDate(days,0))))
 end
+local function RemovePremium(ply)
+	if !GetPremiumExpireDate(ply) then return end
+	sql.Query(f("DELETE FROM %s WHERE SteamID='%s'",table_name,ply:SteamID()))
+	return true
+end
 local function GetPremiumExpireDate(ply)
 	local tab = sql.Query(f("SELECT Date FROM %s WHERE SteamID='%s'",table_name,ply:SteamID()))
 	if tab then return tab[1] end
@@ -71,6 +84,7 @@ end
 local L_table = {
 	["Enum"] = {["Month"] = MONTH,["Month_3"] = MONTH_3,["Month_6"] = MONTH_6,["Month_9"] = MONTH_9,["Year"] = MONTH_12,["Perm"] = PERM}, -- S_D.Premium.Enum.Month
 	["AddPremium"] = AddPremium, -- S_D.Premium.AddPremium(ply,days)
+	["RemovePremium"] = RemovePremium, -- S_D.Premium.RemovePremium(ply)
 	["GetPremiumExpireDate"] = GetPremiumExpireDate, -- S_D.Premium.GetPremiumExpireDate(ply)
 	["GetAllPremium"] = GetAllPremium, -- S_D.Premium.GetAllPremium()
 	["StringToTable"] = StringToTable, -- S_D.Premium.StringToTable(str)
@@ -80,3 +94,4 @@ S_D.Premium = {}
 for name,func in pairs(L_table) do
 	S_D.Premium[name] = func
 end
+sql.Query = s
