@@ -30,7 +30,7 @@ function ENT:MachineActive()
 end
 function ENT:Touch(entity)
 	if entity:GetClass() == "ent_supplies" and !active then
-		ActiveSwitch(true)
+		ActiveSwitch(false)
 		entity:Remove()
 		timer.Simple(length,function()
 			local pos,angle = self:GetPos(),self:GetAngles()
@@ -39,7 +39,7 @@ function ENT:Touch(entity)
 			if !IsValid(product) then error("ent_product failed to create.") return end
 			product:SetPos(pos)
 			product:Spawn()
-			ActiveSwitch(false)
+			ActiveSwitch(true)
 		end)
 	end
 end
