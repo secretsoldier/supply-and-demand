@@ -11,12 +11,20 @@ function ENT:Initialize()
 	self:SetSolid(SOLID_VPHYSICS)
 	S_D.DropOff.RegisterEntity(self)
 end
-local active,entity,validuse = false
+local active,entity,validuse,IO,func = false
 local function Active(bool) active = bool return active end
-function ENT:DropEntity(class,t)
+function ENT:ActivateOutput(class,t)
 	Active(true)
 	entity = class
 	validuse = t
+	IO = 1
+end
+function ENT:ActivateInput(class,t,in_func)
+	Active(true)
+	entity = class
+	validuse = t
+	func = in_func
+	IO = 2
 end
 function ENT:DisableEntity()
 	Active(false)
@@ -39,8 +47,14 @@ function ENT:SpawnEntity(class)
 	product:Spawn()
 end
 function ENT:Use(activator,caller)
-	if active and Valid(validuse,caller) and  then
+	if active and Valid(validuse,caller) and IO == 1 then
 		self:SpawnEntity(entity)
+	end
+end
+function ENT:Touch(ent)
+	if active and Valid(validuse,caller) and IO == 2 and ent:GetClass() == entity then
+		ent:Remove()
+		func()
 	end
 end
 function ENT:VisibleSet(bool)
