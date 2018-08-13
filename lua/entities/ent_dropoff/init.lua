@@ -12,7 +12,7 @@ function ENT:Initialize()
 	S_D.DropOff.RegisterEntity(self)
 end
 local active,entity,validuse,IO,func = false
-local function Active(bool) active = bool return active end
+function ENT:Active(bool) if active then active = bool end return active end
 function ENT:ActivateOutput(class,t)
 	Active(true)
 	entity = class
@@ -32,7 +32,7 @@ function ENT:DisableEntity()
 	validuse = nil
 end
 local function Valid(t,ply)
-	for k,v in pairs(t)
+	for k,v in pairs(t) do
 		if ply == v then
 			return true
 		end
