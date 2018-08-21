@@ -1,57 +1,46 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
-
-local model = "models/props_phx/construct/plastic/plastic_panel1x1.mdl" -- Placeholder
+//Process
+local model = "models/props_wasteland/laundry_washer003.mdl" -- Placeholder
 
 function ENT:Initialize()
 	self:SetModel(model)
 	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
+	self:SetNWVars()
 	local phys = self:GetPhysicsObject()
 	if (phys:IsValid()) then
 		phys:Wake()
 	end
 end
-local active,length = false,300
-local function ActiveSwitch(bool)
-	if bool == nil then
-		active = !active
-	else
-		active = bool
-	end
-	LoopSound(active)
-	hook.Run("S_D_MachineActivated",self,active)
-	return active
+
+local length = 60
+function ENT:ActiveSwitch(bool)
+	self:SetDTBool(0,bool)
+	return self:GetDTBool(0)
 end
 function ENT:MachineActive()
-	return active
+	return self:GetDTBool(0)
 end
 function ENT:Touch(entity)
-	if entity:GetClass() == "ent_supplies" and !active then
-		ActiveSwitch(false)
+	if entity:GetClass() == "ent_supplies" and !self:MachineActive() then
+		self:SetDTBool(0,true)
 		entity:Remove()
-		timer.Simple(length,function()
-			local pos,angle = self:GetPos(),self:GetAngles()
-			pos = pos + 100 * angle:Forward()
-			local product = ents.Create("ent_product")
-			if !IsValid(product) then error("ent_product failed to create.") return end
-			product:SetPos(pos)
-			product:Spawn()
-			ActiveSwitch(true)
+		timer.Create("SpawnProduct",length,1,function()
+			self:SpawnEntity("ent_product")
+			self:SetDTBool(0,false)
 		end)
 	end
 end
-local sound1,sound2,id_1,id_2 = "sound/phx/epicmetal_hard7.wav","sound/phx/hmetal1.wav"
-local function LoopSound(bool)
-	if bool then
-		id_1 = self:StartLoopingSound(sound1)
-		id_2 = self:StartLoopingSound(sound2)
-	else
-		self:StopLoopingSound(id_1)
-		self:StopLoopingSound(id_2)
-	end
+function ENT:SpawnEntity(class)
+	local pos,angle = self:GetPos(),self:GetAngles()
+	pos = pos + 100 * angle:Forward()
+	local product = ents.Create(class)
+	if !IsValid(product) then error(string.format("%s failed to create.",class)) return end
+	product:SetPos(pos)
+	product:Spawn()
 end
 local owner
 function ENT:GetOwner()

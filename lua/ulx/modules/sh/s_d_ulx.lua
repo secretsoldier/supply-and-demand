@@ -30,17 +30,16 @@ end
 local PrintPremiumPlayers = ulxCommand("PrintPremiumPlayers",PrintPremiumPlayers_func,
 	"Prints a list of all the players with Premium in console.",SUPERADMIN)
 
-if S_D.dev then
-	local function CreateEntity(class,pos)
-		local ent = ents.Create(class)
-		if !IsValid(ent) then return end
-		ent:SetPos(pos)
-		ent:Spawn()
-	end
-	local SpawnEntity = ulxCommand("SpawnEntity",function(ply,class) CreateEntity(class,ply:GetEyeTrace().HitPos) ulxLog("Spawned %s",ply,class) end,
-		"Spawns an entity from a pre-selected list.",SUPERADMIN)
-	local string = ulxParam(STRING,"class")
-	string.completes = {"ent_supplies","ent_product","ent_process","ent_dropoff"}
-	string.error = "Please choose a class"
-	SpawnEntity:addParam(string)
+
+local function CreateEntity(class,pos)
+	local ent = ents.Create(class)
+	if !IsValid(ent) then return end
+	ent:SetPos(pos)
+	ent:Spawn()
 end
+local SpawnEntity = ulxCommand("SpawnEntity",function(ply,class) CreateEntity(class,ply:GetEyeTrace().HitPos) ulxLog("Spawned %s",ply,class) end,
+	"Spawns an entity from a pre-selected list.",SUPERADMIN)
+local string = ulxParam(STRING,"class")
+string.completes = {"ent_supplies","ent_product","ent_process","ent_dropoff"}
+string.error = "Please choose a class"
+SpawnEntity:addParam(string)

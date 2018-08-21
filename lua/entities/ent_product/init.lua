@@ -1,8 +1,8 @@
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
-
-local model = "models/props_phx/construct/plastic/plastic_panel1x1.mdl" -- Placeholder
+// Product
+local model = "models/props_c17/consolebox05a.mdl" -- Placeholder
 
 function ENT:Initialize()
 	self:SetModel(model)

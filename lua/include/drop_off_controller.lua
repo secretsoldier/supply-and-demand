@@ -34,7 +34,7 @@ local function GetLowestID()
 	if !(t == math.huge) then return t end
 end
 local function OrderSupply(ent,ply,quantity)
-
+	
 end
 local WAYPOINT,TIMER = 0,1
 local function netSend(ply,enum,var)
@@ -49,6 +49,61 @@ local function netSend(ply,enum,var)
 end
 net.Receive(S_D.NetworkString.Format(S_D.NetworkString["util"]),function()
 	
+end)
+
+// Placeholder shit!!!
+
+local function fileWriteVector(path,vector)
+	local file = file.Open(path,"wb","DATA")
+	file:Seek(0)
+	for k,v in pairs(vector) do
+		file:WriteFloat(v.x)
+		file:WriteFloat(v.y)
+		file:WriteFloat(v.z)
+	end
+	file:Flush()
+end
+local function fileReadVector(path)
+	local file = file.Open(path,"rb","DATA")
+	local vectors,counter = {},0
+	file:Seek(0)
+	for x=1,(file:Size()/4)/3 do
+		counter = counter + 1
+		local x = file:ReadFloat()
+		local y = file:ReadFloat()
+		local z = file:ReadFloat()
+		vectors[counter] = Vector(x,y,z)
+	end
+	return vectors
+end
+
+local function SavePoss()
+	local placeholders = ents.FindByClass("ent_placedrop")
+	local positions,counter = {},0
+	for k,v in pairs(placeholders) do
+		counter = counter + 1
+		positions[counter] = v:GetPos()
+	end
+	fileWriteVector("Supply&Demand/poss.dat",positions)
+end
+local function RemovePoss()
+	file.Delete("Supply&Demand/poss.dat")
+end
+concommand.Add("SD_SaveDropOffPositions",SavePoss)
+concommand.Add("SD_RemoveDropOffPositions",RemovePoss)
+
+hook.Add("Initialize","DropOffPositions",function()
+	if !file.Exists("Supply&Demand","DATA") then
+		file.CreateDir("Supply&Demand")
+	end
+	if file.Exists("Supply&Demand/poss.dat","DATA") then
+		local poss = fileReadVector("Supply&Demand/poss.dat")
+		for k,v in pairs(poss) do
+			local ent = ents.Create("ent_dropoff")
+			ent:SetPos(v)
+			ent:Spawn()
+		end
+	end
 end)
 
 local L_table = {

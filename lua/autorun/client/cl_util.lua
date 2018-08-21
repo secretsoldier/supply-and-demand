@@ -3,7 +3,7 @@ local function timerActive(seconds)
 	hookSec = seconds
 	timer.Create("SD_SupplyTimer",seconds,(seconds+1),function()
 		hookSec = hookSec - 1
-		if hookSec =< 0 then
+		if hookSec <= 0 then
 			net.Start("SD_SC1")
 			net.SendToServer()
 		end
@@ -41,7 +41,7 @@ net.Receive("SD_SC1",function()
 	local util = net.ReadInt(2)
 	if util == 0 then -- Waypoint
 		hookPos = net.ReadVector()
-	elseif util == 1 -- Timer
+	elseif util == 1 then -- Timer
 		timerActive(net.ReadInt(12))
 	end
 end)
