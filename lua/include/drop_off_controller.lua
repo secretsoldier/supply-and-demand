@@ -49,27 +49,33 @@ ENT:SpawnEntity(class)
 ENT:VisibleSet(bool)
 
 PLY:GetGang() / S_D.Gang.ReturnGang(ply)
+
+WAYPOINT
+TIMER
 ]]
 local function OrderNormalSupply(ply,quantity)
 	if !ActiveEnts() then return false end
 	local ent = ReturnActiveEnt()
 	local t = S_D.Gang.ReturnGang(ply) or {ply}
-	
+
 	--timer.Create(string.format("ENT%s Timer",table.KeyFromValue(ent_list,ent)),)
 end
 local function OrderPremiumSupply(ply,quantity)
 	if !S_D.Premium.GetPremiumExpireDate(ply) then return end
 	if !ActiveEnts() then return false end
 	local ent = ReturnActiveEnt()
+	local t = S_D.Gang.ReturnGang(ply) or {ply}
 end
 local function OrderNormalProduct(ply)
 	if !ActiveEnts() then return false end
 	local ent = ReturnActiveEnt()
+	local t = S_D.Gang.ReturnGang(ply) or {ply}
 end
 local function OrderPremiumProduct(ply)
 	if !S_D.Premium.GetPremiumExpireDate(ply) then return end
 	if !ActiveEnts() then return false end
 	local ent = ReturnActiveEnt()
+	local t = S_D.Gang.ReturnGang(ply) or {ply}
 end
 local function WAYPOINT(t,position) for k,v in pairs(t) do netSend(v,0,position) end end
 local function TIMER(t,seconds) for k,v in pairs(t) do netSend(v,1,seconds) end end
