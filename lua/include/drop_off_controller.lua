@@ -1,13 +1,11 @@
---[[
-???
-]]--
-local ent_list,counter = {},1
+local ent_list,counter = {},0
 local function RegisterEnt(ent)
-	ent_list[counter] = ent
 	counter = counter + 1
+	ent_list[counter] = ent
 end
 local function RndEnt(t)
-	return t[table.Random(t)]
+	local x = table.Random(t)
+	return t[x],x
 end
 local function ActiveEnts()
 	for k,v in pairs(ent_list) do
@@ -16,10 +14,21 @@ local function ActiveEnts()
 		end
 	end
 end
+local function ReturnActiveEnt()
+	-- This is assuming that ActiveEnts() returned true,
+	local t = {}
+	for k,v in pairs(ent_list) do
+		if v:Active() then
+			t[#t+1] = v
+		end
+	end
+	return RndEnt(v)
+end
 local q,id = {},0
 local function AddQ(ply)
-	q[id] = ply
 	id = id + 1
+	q[id] = ply
+	return id
 end
 local function RemoveQ(ply)
 	table.RemoveByValue(q,ply)
@@ -33,10 +42,37 @@ local function GetLowestID()
 	end
 	if !(t == math.huge) then return t end
 end
-local function OrderSupply(ent,ply,quantity)
+--[[
+ENT:ActivateOutput(class,t)
+ENT:ActivateInput(class,t,in_func)
+ENT:SpawnEntity(class)
+ENT:VisibleSet(bool)
+
+PLY:GetGang() / S_D.Gang.ReturnGang(ply)
+]]
+local function OrderNormalSupply(ply,quantity)
+	if !ActiveEnts() then return false end
+	local ent = ReturnActiveEnt()
+	local t = S_D.Gang.ReturnGang(ply) or {ply}
 	
+	--timer.Create(string.format("ENT%s Timer",table.KeyFromValue(ent_list,ent)),)
 end
-local WAYPOINT,TIMER = 0,1
+local function OrderPremiumSupply(ply,quantity)
+	if !S_D.Premium.GetPremiumExpireDate(ply) then return end
+	if !ActiveEnts() then return false end
+	local ent = ReturnActiveEnt()
+end
+local function OrderNormalProduct(ply)
+	if !ActiveEnts() then return false end
+	local ent = ReturnActiveEnt()
+end
+local function OrderPremiumProduct(ply)
+	if !S_D.Premium.GetPremiumExpireDate(ply) then return end
+	if !ActiveEnts() then return false end
+	local ent = ReturnActiveEnt()
+end
+local function WAYPOINT(t,position) for k,v in pairs(t) do netSend(v,0,position) end end
+local function TIMER(t,seconds) for k,v in pairs(t) do netSend(v,1,seconds) end end
 local function netSend(ply,enum,var)
 	net.Start(S_D.NetworkString.Format(S_D.NetworkString["util"]))
 	net.WriteInt(enum,2)
@@ -51,7 +87,7 @@ net.Receive(S_D.NetworkString.Format(S_D.NetworkString["util"]),function()
 	
 end)
 
-// Placeholder shit!!!
+-- Placeholder shit!!!
 
 local function fileWriteVector(path,vector)
 	local file = file.Open(path,"wb","DATA")
@@ -78,8 +114,7 @@ local function fileReadVector(path)
 end
 
 local function SavePoss()
-	local placeholders = ents.FindByClass("ent_placedrop")
-	local positions,counter = {},0
+	local placeholders,positions,counter = ents.FindByClass("ent_placedrop"),{},0
 	for k,v in pairs(placeholders) do
 		counter = counter + 1
 		positions[counter] = v:GetPos()
@@ -89,10 +124,11 @@ end
 local function RemovePoss()
 	file.Delete("Supply&Demand/poss.dat")
 end
-concommand.Add("SD_SaveDropOffPositions",SavePoss)
-concommand.Add("SD_RemoveDropOffPositions",RemovePoss)
+-- Uncomment these commands if you do not have ULX:
+--concommand.Add("SD_SaveDropOffPositions",SavePoss,,,FCVAR_LUA_SERVER) 
+--concommand.Add("SD_RemoveDropOffPositions",RemovePoss,,,FCVAR_LUA_SERVER)
 
-hook.Add("Initialize","DropOffPositions",function()
+hook.Add("InitPostEntity","DropOffPositions",function()
 	if !file.Exists("Supply&Demand","DATA") then
 		file.CreateDir("Supply&Demand")
 	end
@@ -110,7 +146,14 @@ local L_table = {
 	["Waypoint"] = function(ply,pos) netSend(ply,0,pos) end, -- S_D.DropOff.Waypoint(ply,pos)
 	["Timer"] = function(ply,seconds) netSend(ply,1,seconds) end, -- S_D.DropOff.Timer(ply,seconds)
 	["RegisterEntity"] = RegisterEnt, -- S_D.DropOff.RegisterEntity(ent)
-	["RandomEntity"] = function() return RndEnt(ent_list) end -- S_D.DropOff.RandomEntity()
+	["RandomEntity"] = function() return RndEnt(ent_list) end, -- S_D.DropOff.RandomEntity()
+	["SavePositions"] = SavePoss, -- S_D.DropOff.SavePositions()
+	["RemovePositions"] = RemovePoss, -- S_D.DropOff.RemovePositions()
+	["Queue"] = {
+		["Add"] = AddQ,
+		["Remove"] = RemoveQ,
+		["GetNext"] = function() return q[GetLowestID()] end
+	}
 }
 S_D.DropOff = {}
 for name,func in pairs(L_table) do

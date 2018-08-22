@@ -1,7 +1,7 @@
 local hookPos,hookSec = nil,nil
 local function timerActive(seconds)
 	hookSec = seconds
-	timer.Create("SD_SupplyTimer",seconds,(seconds+1),function()
+	timer.Create("SD_Timer",seconds,(seconds+1),function()
 		hookSec = hookSec - 1
 		if hookSec <= 0 then
 			net.Start("SD_SC1")
@@ -10,7 +10,7 @@ local function timerActive(seconds)
 	end)
 end
 local function timerDeactive()
-	timer.Remove("SD_SupplyTimer")
+	timer.Remove("SD_Timer")
 end
 local ScreenSpecs = {["x"]=ScrW(),["y"]=ScrH()}
 surface.CreateFont("Trebuchet_TimerFont",{

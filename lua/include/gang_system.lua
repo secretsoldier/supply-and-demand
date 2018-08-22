@@ -23,7 +23,7 @@ local function CreateGang(ply,name)
 			end
 		end
 	end
-	if !a then return a,b end
+	if !a and b then return a,b end
 	local t = Empty_Gang()
 	t.name = name
 	t.leader = ply
@@ -58,11 +58,11 @@ local function ReturnGangRole(ply)
 end
 local function RegisterMember(ply,leader)
 	local meta = getmetatable(ply)
-	meta.GetGang = function(self)
+	 function meta:GetGang()
 		local x,_ = ReturnGang(self)
 		return x
 	end
-	meta.GetGangRole = function(self)
+	function meta.GetGangRole()
 		return ReturnGangRole(self)
 	end
 	setmetatable(ply,meta)
@@ -98,7 +98,7 @@ local L_table = -- Global Functions:
 	["RemoveGang"] = RemoveGang, -- S_D.Gang.RemoveGang(leader)
 	["AddMember"] = AddMember, -- S_D.Gang.AddMember(leader,member)
 	["RemoveMember"] = RemoveMember, -- S_D.Gang.RemoveMember(leader,member)
-	["Print"] = print -- S_D.Gang.Print(text)
+	["ReturnGang"] = ReturnGang -- S_D.Gang.ReturnGang(ply)
 }
 S_D.Gang = {}
 for name,func in pairs(L_table) do

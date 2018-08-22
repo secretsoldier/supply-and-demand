@@ -34,7 +34,7 @@ local PrintPremiumPlayers = ulxCommand("PrintPremiumPlayers",PrintPremiumPlayers
 local function CreateEntity(class,pos)
 	local ent = ents.Create(class)
 	if !IsValid(ent) then return end
-	ent:SetPos(pos)
+	ent:SetPos(pos + Vector(0,0,15))
 	ent:Spawn()
 end
 local SpawnEntity = ulxCommand("SpawnEntity",function(ply,class) CreateEntity(class,ply:GetEyeTrace().HitPos) ulxLog("Spawned %s",ply,class) end,
@@ -43,3 +43,8 @@ local string = ulxParam(STRING,"class")
 string.completes = {"ent_supplies","ent_product","ent_process","ent_dropoff"}
 string.error = "Please choose a class"
 SpawnEntity:addParam(string)
+
+local SavePositions = ulxCommand("SavePositions",function(ply,class) S_D.DropOff.SavePositions() end,
+	"Saves the positions for the Drop-Off entities.",SUPERADMIN)
+local RemovePositions = ulxCommand("RemovePositions",function(ply,class) S_D.DropOff.RemovePositions() end,
+	"Removes the positions for the Drop-Off entities.",SUPERADMIN)

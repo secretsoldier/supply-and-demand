@@ -10,6 +10,7 @@ function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_VPHYSICS)
 	self:SetSolid(SOLID_VPHYSICS)
 	S_D.DropOff.RegisterEntity(self)
+	self:VisibleSet(false)
 end
 local active,entity,validuse,IO,func = false
 function ENT:Active(bool) if active then active = bool end return active end
@@ -53,11 +54,10 @@ function ENT:Use(activator,caller)
 end
 function ENT:Touch(ent)
 	if active and Valid(validuse,caller) and IO == 2 and ent:GetClass() == entity then
-		ent:Remove()
 		func()
 	end
 end
 function ENT:VisibleSet(bool)
-	self:SetNoDraw(bool)
-	self:SetNotSolid(bool)
+	self:SetNoDraw(!bool)
+	self:SetNotSolid(!bool)
 end
