@@ -23,7 +23,7 @@ surface.CreateFont("Trebuchet_TimerFont",{
 hook.Add("HUDPaint","ClientUtilFunction",function()
 	if hookPos then
 		local dist = math.Round(LocalPlayer():GetPos():Distance(hookPos))
-		if dist < 20 then hookPos = nil end
+		if dist < 70 then hookPos = nil return end
 		local pos = (hookPos+Vector(0,0,50)):ToScreen()
 		draw.SimpleText(dist,"Trebuchet18",pos.x,pos.y)
 	end
@@ -32,7 +32,7 @@ hook.Add("HUDPaint","ClientUtilFunction",function()
 		surface.SetFont("Trebuchet_TimerFont")
 		local width,height = surface.GetTextSize(time)
 		surface.SetTextColor(0,0,0,255)
-		surface.TextPos((ScreenSpecs.x/2)-(width/2),ScreenSpecs.y/15)
+		surface.SetTextPos((ScreenSpecs.x/2)-(width/2),ScreenSpecs.y/15)
 		surface.DrawText(time)
 	end
 end)
@@ -40,7 +40,7 @@ end)
 net.Receive("SD_SC1",function()
 	local util = net.ReadInt(2)
 	if util == 0 then -- Waypoint
-		hookPos = net.ReadVector()
+		hookPos = net.ReadEntity():GetPos()
 	elseif util == 1 then -- Timer
 		timerActive(net.ReadInt(12))
 	end

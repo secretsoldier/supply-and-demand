@@ -40,7 +40,7 @@ end
 local SpawnEntity = ulxCommand("SpawnEntity",function(ply,class) CreateEntity(class,ply:GetEyeTrace().HitPos) ulxLog("Spawned %s",ply,class) end,
 	"Spawns an entity from a pre-selected list.",SUPERADMIN)
 local string = ulxParam(STRING,"class")
-string.completes = {"ent_supplies","ent_product","ent_process","ent_dropoff"}
+string.completes = {"ent_supplies","ent_product","ent_process","ent_dropoff","ent_placedrop"}
 string.error = "Please choose a class"
 SpawnEntity:addParam(string)
 

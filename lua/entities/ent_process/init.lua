@@ -16,7 +16,7 @@ function ENT:Initialize()
 	end
 end
 
-local length = 60
+local length = S_D.Configs.Process_Process_Length
 function ENT:ActiveSwitch(bool)
 	self:SetDTBool(0,bool)
 	return self:GetDTBool(0)

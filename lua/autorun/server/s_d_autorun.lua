@@ -13,9 +13,11 @@ for k,v in pairs(S_D.NetworkString) do
 	end
 end
 local modules = {
+	"config",
 	"gang_system",
 	"premium",
-	"drop_off_controller"
+	"drop_off_controller",
+	"commands"
 }
 for k,v in pairs(modules) do
 	include(string.format("include/%s.lua",v))
