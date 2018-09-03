@@ -136,9 +136,10 @@ local function fileReadVector(path)
 end
 
 local function SavePoss()
-	local positions,counter = {{}},1
+	local positions,counter = {},1
 	for k,v in pairs(ents.FindByClass("ent_placedrop")) do
-		print(k,v)
+		print("Saved",k,v)
+		positions[counter] = {}
 		positions[counter].pos = v:GetPos()
 		positions[counter].ang = v:GetAngles()
 		counter = counter + 1
@@ -149,8 +150,8 @@ local function RemovePoss()
 	file.Delete("Supply&Demand/poss.txt")
 end
 -- Uncomment these commands if you do not have ULX:
-concommand.Add("SD_SaveDropOffPositions",SavePoss,nil,nil,FCVAR_LUA_SERVER) 
-concommand.Add("SD_RemoveDropOffPositions",RemovePoss,nil,nil,FCVAR_LUA_SERVER)
+concommand.Add("SD_SaveDropOffPositions",SavePoss,nil,nil,FCVAR_PROTECTED) 
+concommand.Add("SD_RemoveDropOffPositions",RemovePoss,nil,nil,FCVAR_PROTECTED)
 
 hook.Add("InitPostEntity","DropOffPositions",function()
 	print("Supply and Demand Init")

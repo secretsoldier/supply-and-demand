@@ -1,6 +1,7 @@
 --[[ 
 COMMAND.Name = "Arrest"
 COMMAND.Flag = EAS.Config.Commands.Arrest
+COMMAND.AdminMode = true
 COMMAND.Args = {{"player", "Name/SteamID"}, {"number", "Duration"}}
 
 COMMAND.Run = SERVER and function(pl, args, supp)
@@ -10,6 +11,7 @@ end
 local SavePositions = {
 	["Name"] = "SavePositions",
 --	["Flag"] = EAS.Config.Commands.SavePositions,
+	["AdminMode"] = true
 	["Args"] = nil,
 	["Run"] = SERVER and function(pl,args,supp)
 		S_D.DropOff.SavePositions()
@@ -18,6 +20,7 @@ local SavePositions = {
 local RemovePositions = {
 	["Name"] = "RemovePositions",
 --	["Flag"] = EAS.Config.Commands.RemovePositions,
+	["AdminMode"] = true
 	["Args"] = nil,
 	["Run"] = SERVER and function(pl,args,supp)
 		S_D.DropOff.RemovePositions()
