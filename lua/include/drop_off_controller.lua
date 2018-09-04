@@ -100,7 +100,7 @@ local function OrderNormalProduct(ply)
 	ent:VisibleSet(true)
 	WAYPOINT(t,ent)
 	//TIMER(t,S_D.Configs.Product_Pickup_Length)
-	ent:ActivateInput("ent_product",t,function() print("Yay!") RunConsoleCommand("DarkRP","setmoney",S_D.Configs.Product_Sell_Price) end)
+	ent:ActivateInput("ent_product",t,function() ply:addMoney(S_D.Configs.Product_Sell_Price) end)
 end
 local function OrderPremiumProduct(ply) -- Not finished
 	if !S_D.Premium.GetPremiumExpireDate(ply) then return end
