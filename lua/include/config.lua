@@ -11,6 +11,8 @@ local configs = {
 	["Supply_Pickup_Length"] = 60,
 	["Process_Machine_Cost"] = 1000,
 	["Process_Process_Length"] = 60,
+	["Machine_Team_Allowed"] = nil, -- Change this if you would like certain teams to only buy the machine
+	["Machine_Entity_Category"] = "Supply and Demand",
 	["Product_Pickup_Length"] = 60,
 	["Product_Sell_Price"] = 800
 }

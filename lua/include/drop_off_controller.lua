@@ -86,6 +86,7 @@ local function OrderNormalSupply(ply,quantity)
 	WAYPOINT(t,ent)
 	//TIMER(t,S_D.Configs.Supply_Pickup_Length)
 	ent:ActivateOutput("ent_supplies",t)
+	ply:addMoney(-Supply_Cost)
 end
 local function OrderPremiumSupply(ply,quantity) -- Not finished
 	if !S_D.Premium.GetPremiumExpireDate(ply) then return end

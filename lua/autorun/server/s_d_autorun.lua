@@ -61,3 +61,12 @@ concommand.Add("SD_SellProduct",function(ply,cmd,args,argStr)
 end,nil,nil,FCVAR_LUA_CLIENT)
 concommand.Add("SD_SaveDropOffPositions",S_D.DropOff.SavePositions,nil,nil,FCVAR_PROTECTED) 
 concommand.Add("SD_RemoveDropOffPositions",S_D.DropOff.RemovePositions,nil,nil,FCVAR_PROTECTED)
+DarkRP.createEntity("Machine Processor",{
+	ent = "ent_process",
+	model = "models/props_wasteland/laundry_washer003.mdl",
+	price = S_D.Configs.Process_Machine_Cost,
+	max = 1,
+	cmd = "SD_BuyMachineProccessor",
+	allowed = S_D.Configs.Machine_Team_Allowed
+	category = S_D.Configs.Machine_Entity_Category
+})
