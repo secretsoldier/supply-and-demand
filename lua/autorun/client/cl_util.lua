@@ -1,3 +1,4 @@
+AddCSLuaFile("include/client-derma.lua")
 local hookPos,hookSec = nil,nil
 local function timerActive(seconds)
 	hookSec = seconds
@@ -25,15 +26,13 @@ hook.Add("HUDPaint","ClientUtilFunction",function()
 		local dist = math.Round(LocalPlayer():GetPos():Distance(hookPos))
 		if dist < 70 then hookPos = nil return end
 		local pos = (hookPos+Vector(0,0,50)):ToScreen()
-		draw.SimpleText(dist,"Trebuchet18",pos.x,pos.y)
+		WaypointHUD(dist,"Trebuchet18",pos.x,pos.y)
 	end
 	if hookSec and hookSec >= 0 then
 		local time = string.format("%s:%s",string.FormattedTime(hookSec).m,string.FormattedTime(hookSec).s)
 		surface.SetFont("Trebuchet_TimerFont")
-		local width,height = surface.GetTextSize(time)
-		surface.SetTextColor(0,0,0,255)
-		surface.SetTextPos((ScreenSpecs.x/2)-(width/2),ScreenSpecs.y/15)
-		surface.DrawText(time)
+		local width,height = surface.GetTextSize(time),
+		TimerHUD(time,(ScreenSpecs.x/2)-(width/2),ScreenSpecs.y/15))
 	end
 end)
 

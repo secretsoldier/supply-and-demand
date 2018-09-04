@@ -1,0 +1,6 @@
+{
+	"last_stable_version": 1.0,
+	"build_state": "beta",
+	"version": 1.0,
+	"unstable": true
+}
