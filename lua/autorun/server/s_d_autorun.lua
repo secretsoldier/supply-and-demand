@@ -5,7 +5,7 @@ if version_info.unstable then
 	print("### This release is considered unstable, please report at errors to the developer ###")
 end
 local latest_version_info
-http.Fetch("https://github.com/secretsoldier/supply-and-demand/blob/master/lua/include/version.txt",function(body)
+http.Fetch("https://raw.githubusercontent.com/secretsoldier/supply-and-demand/master/lua/include/version.txt",function(body)
 	latest_version_info = util.JSONToTable(body)
 end)
 if latest_version_info then
@@ -61,12 +61,14 @@ concommand.Add("SD_SellProduct",function(ply,cmd,args,argStr)
 end,nil,nil,FCVAR_LUA_CLIENT)
 concommand.Add("SD_SaveDropOffPositions",S_D.DropOff.SavePositions,nil,nil,FCVAR_PROTECTED) 
 concommand.Add("SD_RemoveDropOffPositions",S_D.DropOff.RemovePositions,nil,nil,FCVAR_PROTECTED)
-DarkRP.createEntity("Machine Processor",{
-	ent = "ent_process",
-	model = "models/props_wasteland/laundry_washer003.mdl",
-	price = S_D.Configs.Process_Machine_Cost,
-	max = 1,
-	cmd = "SD_BuyMachineProccessor",
-	allowed = S_D.Configs.Machine_Team_Allowed
-	category = S_D.Configs.Machine_Entity_Category
-})
+if DarkRP then
+	DarkRP.createEntity("Machine Processor",{
+		ent = "ent_process",
+		model = "models/props_wasteland/laundry_washer003.mdl",
+		price = S_D.Configs.Process_Machine_Cost,
+		max = 1,
+		cmd = "SD_BuyMachineProccessor",
+		allowed = S_D.Configs.Machine_Team_Allowed,
+		category = S_D.Configs.Machine_Entity_Category
+	})
+end
