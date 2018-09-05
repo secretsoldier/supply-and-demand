@@ -1,24 +1,27 @@
+local lang = util.JSONToTable(util.Decompress(file.Read("include/english-language-table.dat","LUA")))
 local version_info = util.JSONToTable(file.Read("include/version.txt","LUA"))
-print("SD: Supply and Demand Initlised.")
-print(string.format("Version: %s %s",version_info.version,version_info.build_state))
+print("###########################################")
+print("Supply and Demand Initlised.")
+print(string.format(lang.version_message,version_info.version,version_info.build_state))
 if version_info.unstable then
-	print("### This release is considered unstable, please report at errors to the developer ###")
+	print(lang.unstable_message)
 end
 local latest_version_info
-http.Fetch("https://raw.githubusercontent.com/secretsoldier/supply-and-demand/master/lua/include/version.txt",function(body)
+http.Fetch(lang.url,function(body,size,headers,code)
 	latest_version_info = util.JSONToTable(body)
-end)
-if latest_version_info then
-	if !(tonumber(version_info.version) < tonumber(latest_version_info.version)) then
-		if (version_info.unstable and !latest_version_info.unstable) and !(version_info.version < latest_version_info.last_stable_version) then
-			print("Supply and Demand can be updated to a stable release")
-		elseif version_info.unstable and latest_version_info.unstable then
-			print("A later version of Supply and Demand is available for download")
+	if latest_version_info then
+		if version_info.version < latest_version_info.version then
+			if version_info.unstable and !latest_version_info.unstable then
+				print(lang.recommend_message)
+			else
+				print(lang.casual_message)
+			end
 		end
+	else
+		print(lang.unable_message)
 	end
-else
-	print("Unable to retrieve version info.")
-end
+end)
+print("###########################################")
 
 S_D = {}
 S_D.dev = false
@@ -30,7 +33,7 @@ S_D.NetworkString.Format = function(string)
 	return string.format("SD_%s",string)
 end
 for k,v in pairs(S_D.NetworkString) do
-	if !(type(v) == "function") then
+	if !isfunction(v) then
 		util.AddNetworkString(S_D.NetworkString.Format(v))
 	end
 end

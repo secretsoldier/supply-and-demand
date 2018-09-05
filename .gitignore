@@ -4,3 +4,4 @@ Model List.docx
 *.sublime-project
 *.sublime-workspace
 .DS_Store
+lua/include/json-info.txt
