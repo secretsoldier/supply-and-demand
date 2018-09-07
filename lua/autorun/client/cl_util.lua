@@ -1,5 +1,12 @@
-AddCSLuaFile("include/client-derma.lua")
-include("include/client-derma.lua")
+function TimerHUD(time,pos)
+	surface.SetTextColor(0,0,0,255)
+	surface.SetTextPos(pos)
+	surface.DrawText(time)
+end
+function WaypointHUD(text,font,posx,posy)
+	draw.SimpleText(text,font,posx,posy)
+end
+
 local hookPos,hookSec = nil,nil
 local function timerActive(seconds)
 	hookSec = seconds
