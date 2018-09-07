@@ -86,7 +86,7 @@ local function OrderNormalSupply(ply,quantity)
 	WAYPOINT(t,ent)
 	//TIMER(t,S_D.Configs.Supply_Pickup_Length)
 	ent:ActivateOutput("ent_supplies",t)
-	ply:addMoney(-Supply_Cost)
+	if DarkRP then ply:addMoney(-S_D.Configs.Supply_Cost) end
 end
 local function OrderPremiumSupply(ply,quantity) -- Not finished
 	if !S_D.Premium.GetPremiumExpireDate(ply) then return end
@@ -189,4 +189,3 @@ S_D.DropOff = {}
 for name,func in pairs(L_table) do
 	S_D.DropOff[name] = func
 end
-function player.GetByNick(_) for k,v in pairs(player.GetAll()) do if (string.find(string.lower(v:Nick()),_)) then return v end end end

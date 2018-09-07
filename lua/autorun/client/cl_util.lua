@@ -1,4 +1,5 @@
 AddCSLuaFile("include/client-derma.lua")
+include("include/client-derma.lua")
 local hookPos,hookSec = nil,nil
 local function timerActive(seconds)
 	hookSec = seconds
@@ -32,7 +33,7 @@ hook.Add("HUDPaint","ClientUtilFunction",function()
 		local time = string.format("%s:%s",string.FormattedTime(hookSec).m,string.FormattedTime(hookSec).s)
 		surface.SetFont("Trebuchet_TimerFont")
 		local width,height = surface.GetTextSize(time),
-		TimerHUD(time,(ScreenSpecs.x/2)-(width/2),ScreenSpecs.y/15))
+		TimerHUD(time,(ScreenSpecs.x/2)-(width/2),ScreenSpecs.y/15)
 	end
 end)
 

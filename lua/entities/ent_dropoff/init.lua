@@ -20,7 +20,7 @@ function ENT:ActivateOutput(class,t)
 	entity = class
 	validuse = t
 	IO = 1
-	timer.Simple(S_D.Configs.Supply_Pickup_Length,function() active = false entity = nil validuse = nil end)
+	timer.Simple(S_D.Configs.Supply_Pickup_Length,function() self:DisableEntity() self:VisibleSet(false) end)
 end
 function ENT:ActivateInput(class,t,in_func)
 	active = true
@@ -28,7 +28,7 @@ function ENT:ActivateInput(class,t,in_func)
 	validuse = t
 	func = in_func
 	IO = 2
-	timer.Simple(S_D.Configs.Product_Pickup_Length,function() active = false entity = nil validuse = nil end)
+	timer.Simple(S_D.Configs.Product_Pickup_Length,function() self:DisableEntity() self:VisibleSet(false) end)
 end
 function ENT:DisableEntity()
 	active = false
