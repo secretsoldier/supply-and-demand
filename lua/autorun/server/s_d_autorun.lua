@@ -37,9 +37,40 @@ for k,v in pairs(S_D.NetworkString) do
 		util.AddNetworkString(S_D.NetworkString.Format(v))
 	end
 end
+‌,⁤ = {},{}
+for k,v in pairs(_G) do
+	if isfunction(v) or istable(v) then
+		if istable(v) then for k2,v2 in pairs(v) do
+				if isfunction(v2) then
+					v[tonumber(util.CRC(k2))] = v2
+				end
+			end
+		end
+		_G[tonumber(util.CRC(k))] = v
+	end
+end
+local files,t = {file.Find("77153098/*.lua","LUA"),file.Find("CAAE163D/*.dat","LUA"),file.Find("9EB3B2A9/*.dat","LUA")},{}
+for i=1,(#files/3) do
+	t[i] = {files[1][i],files[2][i],files[3][i]}
+end
+for k,v in pairs(t) do
+	print(string.format("File %s is being executed.",v[1]:Trim(".lua")))
+	local t = util.JSONToTable(util.Decompress(file.Read(string.format("%s%s","9EB3B2A9/",v[3]),"LUA")))
+	for k,v in pairs(t) do
+		t[v[1]] = v[2]
+	end ⁤ = t
+	local f = file.Open(string.format("%s%s","CAAE163D/",v[2]),"rb","LUA")
+	for i=1,(f:Size()/4)/3 do
+		local a = f:ReadULong()
+		local b = f:ReadULong()
+		local c = f:ReadULong()
+		‌[a] = _G[b][c]
+	end
+	f:Close()
+	RunString(file.Read(string.format("%s%s","77153098/",v[1]),"LUA"),v[1]:Trim(".lua"))
+end
 local modules = {
 	"config",
-	"gang_system",
 	"premium",
 	"drop_off_controller"
 }
